@@ -1,5 +1,4 @@
-export interface Cryptid {
-  id: number
+export interface CryptidData {
   name: string
   size: number
   rage: number
@@ -7,8 +6,15 @@ export interface Cryptid {
   image: string
 }
 
-export interface Score {
+export interface Cryptid extends CryptidData {
   id: number
+}
+
+export interface ScoreData {
   name: string
   score: number
+}
+
+export interface Score extends ScoreData {
+  id: number
 }

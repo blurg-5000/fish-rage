@@ -1,16 +1,15 @@
 import db from './connection.ts'
+import { Score, ScoreData } from '../../models/models.ts'
 
-export async function getAllFruits() {
-  const fruit = await db('fruit').select()
-  return fruit as Fruit[]
+export async function getAllScores(): Promise<Score[]> {
+  return await db('scores').select()
 }
 
-export async function getFruitById(id: number | string) {
-  const fruit = await db('fruit').select().first().where({ id })
-  return fruit as Fruit
+export async function delScoreById(id: number): Promise<void> {
+  await db('scores').del().where({ id })
 }
 
-export async function addFruit(data: FruitData) {
-  const [id] = await db('fruit').insert(data)
+export async function addScore(newScore: ScoreData) {
+  const [id] = await db('scores').insert(newScore)
   return id
 }
