@@ -6,10 +6,11 @@ interface Props {
 export default function HorizontalLifeBar({ color, value }: Props) {
   const fullWidth = 96
   const max = 100
-  const whiteValue = 100 - value
-  const percent = whiteValue / max
+  // const whiteValue = 100 - value
+  const percent = value / max
   // Dynamic value gets put into the dynamic svg - rect
   const dynamicValue = Math.floor(percent * fullWidth)
+
   return (
     <>
       {/* LANDSCAPE LIFE BAR SVG */}

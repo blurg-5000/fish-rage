@@ -1,6 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
 import { useState } from 'react'
+import HorizontalLifeBar from '../components/HorizontalLifeBar'
+import VerticalLifeBar from '../components/VerticalLifeBar'
 
 interface Props {
   cryptid: Cryptid
@@ -17,13 +19,13 @@ export default function Game({ cryptid }: Props) {
     m3: false,
     m4: false,
     m5: false,
-    m6: false
+    m6: false,
   })
   const queryClient = useQueryClient()
 
   function finishFishing() {
     setScore(score + cryptid.points)
-    queryClient.invalidateQueries({queryKey: ['cryptids']})
+    queryClient.invalidateQueries({ queryKey: ['cryptids'] })
   }
 
   function getBeatenUp() {
@@ -32,15 +34,25 @@ export default function Game({ cryptid }: Props) {
 
   return (
     <>
-    <p>Score: {score}</p>
-    <p>Boat health: {boatHealth}</p>
-  <p>Cryptid: {cryptid.name}</p>
-  <button
-  onClick={finishFishing}
-  >fish</button>
-   <button
-  onClick={getBeatenUp}
-  >get beaten up</button>
+      <p>Score: {score}</p>
+      <p>Boat health: {boatHealth}</p>
+      <p>Cryptid: {cryptid.name}</p>
+      <button onClick={finishFishing}>fish</button>
+      <button onClick={getBeatenUp}>get beaten up</button>
+      <div className="flex flex-row">
+        <div className="flex flex-col">
+          {/* LineHealth */}
+          <p className="text-center">Line Health</p>
+          <VerticalLifeBar color="blue" value={lineHealth} />
+        </div>
+        <div className="flex flex-col">
+          {/* CatchProgress */}
+          <p className="text-center">Catch Progress</p>
+          <VerticalLifeBar color="red" value={catchProgress} />
+        </div>
+      </div>
+      {/* Boat Health */}
+      <HorizontalLifeBar color="green" value={boatHealth} />
     </>
-)
+  )
 }
