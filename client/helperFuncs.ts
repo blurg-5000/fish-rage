@@ -1,6 +1,4 @@
-import { Cryptid } from "../models/models";
-
-export function getRandomCryptid(arr: Cryptid[]): Cryptid {
+export function shuffleArray<Type>(arr: Type[]): Type[] {
   const array = [...arr]
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
@@ -8,5 +6,9 @@ export function getRandomCryptid(arr: Cryptid[]): Cryptid {
       array[i] = array[j]
       array[j] = temp
     }
-  return array[0]
+  return array
+}
+
+export function randomRange(myMin: number, myMax: number): number {
+  return Math.floor(Math.random() * (myMax - myMin + 1)) + myMin
 }
