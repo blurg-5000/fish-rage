@@ -34,25 +34,31 @@ export default function Game({ cryptid }: Props) {
 
   return (
     <>
-      <p>Score: {score}</p>
-      <p>Boat health: {boatHealth}</p>
-      <p>Cryptid: {cryptid.name}</p>
-      <button onClick={finishFishing}>fish</button>
-      <button onClick={getBeatenUp}>get beaten up</button>
-      <div className="flex flex-row">
-        <div className="flex flex-col">
-          {/* LineHealth */}
-          <p className="text-center">Line Health</p>
-          <VerticalLifeBar color="blue" value={lineHealth} />
+      <section className="m-8">
+        <p className="text-white">Score: {score}</p>
+        <p className="text-white">Boat health: {boatHealth}</p>
+        <p className="text-white">Cryptid: {cryptid.name}</p>
+        <button className="p-2 text-white" onClick={finishFishing}>
+          fish
+        </button>
+        <button className="text-white" onClick={getBeatenUp}>
+          get beaten up
+        </button>
+        <div className="flex">
+          <div className="flex flex-col">
+            {/* LineHealth */}
+            <p className="text-center text-white">Line Health</p>
+            <VerticalLifeBar color="blue" value={lineHealth} />
+          </div>
+          <div className="flex flex-col">
+            {/* CatchProgress */}
+            <p className="text-center text-white">Catch Progress</p>
+            <VerticalLifeBar color="red" value={catchProgress} />
+          </div>
         </div>
-        <div className="flex flex-col">
-          {/* CatchProgress */}
-          <p className="text-center">Catch Progress</p>
-          <VerticalLifeBar color="red" value={catchProgress} />
-        </div>
-      </div>
-      {/* Boat Health */}
-      <HorizontalLifeBar color="green" value={boatHealth} />
+        {/* Boat Health */}
+        <HorizontalLifeBar color="green" value={boatHealth} />
+      </section>
     </>
   )
 }
