@@ -14,8 +14,8 @@ export default function HorizontalLifeBar({ color, value }: Props) {
   return (
     <>
       {/* LANDSCAPE LIFE BAR SVG */}
-      <div className="p-4">
-        <p>Boat Health Bar</p>
+      <div className="absolute bottom-0 right-0 p-4 ">
+        <p className="text-white">Boat Health Bar</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 -0.5 100 25"
