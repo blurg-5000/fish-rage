@@ -1,3 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+import { getCryptids } from '../apis/cryptids'
+import Game from '../components/Game'
+
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
 export default function Fishing() {
