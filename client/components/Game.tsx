@@ -3,6 +3,7 @@ import { Cryptid } from '../../models/models'
 import { useState } from 'react'
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
+import Boat from './Boat'
 
 interface Props {
   cryptid: Cryptid
@@ -39,20 +40,29 @@ export default function Game({ cryptid }: Props) {
       <p>Cryptid: {cryptid.name}</p>
       <button onClick={finishFishing}>fish</button>
       <button onClick={getBeatenUp}>get beaten up</button>
+      <div className="flex w-full justify-center"></div>
       <div className="flex flex-row">
-        <div className="flex flex-col">
+        <div className="absolute pl-2">
           {/* LineHealth */}
           <p className="text-center">Line Health</p>
           <VerticalLifeBar color="blue" value={lineHealth} />
         </div>
-        <div className="flex flex-col">
+        <div className="absolute pl-28">
           {/* CatchProgress */}
           <p className="text-center">Catch Progress</p>
           <VerticalLifeBar color="red" value={catchProgress} />
         </div>
       </div>
       {/* Boat Health */}
-      <HorizontalLifeBar color="green" value={boatHealth} />
+      <div className="flex flex-col pl-[30%]">
+        {/* BOAT svg's */}
+        <div className="">
+          <div>
+            <Boat decay={boatHealth} />
+          </div>
+          <HorizontalLifeBar color="green" value={boatHealth} />
+        </div>
+      </div>
     </>
   )
 }
