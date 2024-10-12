@@ -15,6 +15,12 @@ export default function Fishing() {
 
   if (isError) return <ErrorPage />
   if (isLoading)
-    return <p>Please wait for the cryptids to arrive. They are shy.</p>
+    return (
+      <section className="flex flex-col items-center justify-center p-10">
+        <p className="text-white">
+          Please wait for the cryptids to arrive. They are shy.
+        </p>
+      </section>
+    )
   if (cryptid) return <Game {...{ cryptid }}></Game>
 }
