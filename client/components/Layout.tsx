@@ -4,12 +4,13 @@ export default function Layout() {
   return (
     <>
       <header>
-        <h1>Fullstack Boilerplate - with Fruits!</h1>
+        <h1>Fish Rage!</h1>
+        <p>Try not to get killed</p>
       </header>
       <main>
         <Outlet />
       </main>
-      <footer></footer>
+      <footer>Lovingly crafted by Team Yuxedo</footer>
     </>
   )
 }

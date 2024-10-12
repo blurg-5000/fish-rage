@@ -1,7 +1,8 @@
 {
-  "name": "boilerplate-fullstack-auth",
+  "name": "fish-rage",
+  "author": "Daph, Hannah, Jared",
   "type": "module",
-  "version": "2.0.0",
+  "version": "1.0.0",
   "main": "server/index.js",
   "license": "MIT",
   "keywords": [
