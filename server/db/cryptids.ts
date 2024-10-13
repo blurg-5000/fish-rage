@@ -15,6 +15,6 @@ export async function addCryptid(newCryptid: CryptidData) {
 }
 
 export async function editCryptid(updatedCryptid: Cryptid) {
-  const {id} = updatedCryptid
-  return await db('cryptids').update(updatedCryptid).where({id})
+  const { id } = updatedCryptid
+  return await db('cryptids').update(updatedCryptid).where({ id })
 }

@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
-
-  
+  // todo: add query to store fishing basket and score? Or maybe pass score as param in route
 
   return (
     <>

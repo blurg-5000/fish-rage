@@ -4,9 +4,12 @@ interface Props {
   killMinion: (id: number) => void
 }
 
-export default function Minion ({alive, minionId, killMinion}: Props) {
-  if (alive) return <button
-  onClick={() => killMinion(minionId)}
-  >Minion {`${minionId +1}`}</button>
+export default function Minion({ alive, minionId, killMinion }: Props) {
+  if (alive)
+    return (
+      <button onClick={() => killMinion(minionId)}>
+        Minion {`${minionId + 1}`}
+      </button>
+    )
   return <></>
 }
