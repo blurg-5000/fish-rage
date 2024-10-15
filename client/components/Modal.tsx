@@ -1,15 +1,25 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
+import { get } from 'superagent'
 
 interface Props {
   cryptid: Cryptid
   showModal: boolean
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  getNewFish: () => void
 }
 
-export default function Modal({ cryptid, showModal, setShowModal }: Props) {
+export default function Modal({
+  cryptid,
+  showModal,
+  setShowModal,
+  getNewFish,
+}: Props) {
   function closeModal() {
     setShowModal(false)
+    getNewFish()
   }
+
   return (
     showModal && (
       <section>

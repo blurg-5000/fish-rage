@@ -88,10 +88,12 @@ export default function Game({ cryptid }: Props) {
   }, [getBeatenUp, minions])
 
   function finishFishing() {
-    // do the toast alert to show details of the cryptid they caught
     setScore((currentScore) => currentScore + cryptid.points)
     setShowModal(true)
+  }
 
+  function getNewFish() {
+    // moved to a new function so this doesn't trigger until the modal is closed
     queryClient.invalidateQueries({ queryKey: ['cryptids'] }) // get a new cryptid to fish for
   }
 
@@ -103,10 +105,12 @@ export default function Game({ cryptid }: Props) {
   }
 
   return showModal ? (
+    // TODO: pause minion generation when modal is shown
     <Modal
       cryptid={cryptid}
       showModal={showModal}
       setShowModal={setShowModal}
+      getNewFish={getNewFish}
     />
   ) : (
     <section>
