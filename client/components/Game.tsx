@@ -13,6 +13,7 @@ export default function Game({ cryptid }: Props) {
   const [boatHealth, setBoatHealth] = useState(100)
   const [lineHealth, setLineHealth] = useState(100)
   const [catchProgress, setCatchProgress] = useState(100)
+  const [showModal, setShowModal] = useState(false)
   const [minions, setMinions] = useState({
     m1: false,
     m2: false,
@@ -25,6 +26,8 @@ export default function Game({ cryptid }: Props) {
 
   function finishFishing() {
     setScore(score + cryptid.points)
+    setShowModal(true)
+
     queryClient.invalidateQueries({ queryKey: ['cryptids'] })
   }
 
@@ -32,8 +35,10 @@ export default function Game({ cryptid }: Props) {
     setBoatHealth(boatHealth - 10)
   }
 
-  return (
-    <>
+  return showModal ? (
+    <p>'Modal!'</p>
+  ) : (
+    <section>
       <p>Score: {score}</p>
       <p>Boat health: {boatHealth}</p>
       <p>Cryptid: {cryptid.name}</p>
@@ -53,6 +58,6 @@ export default function Game({ cryptid }: Props) {
       </div>
       {/* Boat Health */}
       <HorizontalLifeBar color="green" value={boatHealth} />
-    </>
+    </section>
   )
 }
