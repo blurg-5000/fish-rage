@@ -49,8 +49,7 @@ export default function Game({ cryptid }: Props) {
   }, [])
 
   if (boatHealth === 0) {
-    // todo: set score to zero because you ded.
-    navigate('/scores')
+    navigate('/scores/0')
   }
 
   useEffect(() => {

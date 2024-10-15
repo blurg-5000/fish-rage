@@ -1,27 +1,29 @@
-import { useQuery } from '@tanstack/react-query'
-import { getScores } from '../apis/scores'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { addNewScore, getScores } from '../apis/scores'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Score } from '../../models/models'
 
 export default function Scores() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['scores'],
     queryFn: getScores,
   })
+  const queryClient = useQueryClient()
   const [form, setForm] = useState('')
   const navigate = useNavigate()
 
   const rawScore = useParams().score || 0
-  const score = isNaN(+rawScore) ? 0 : +rawScore
-  console.log(score)
+  let score = isNaN(+rawScore) ? 0 : +rawScore
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm(() => e.target.value)
   }
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    // todo: api call
+    await addNewScore((data as Score[])[9].id, { name: form, score })
+    await queryClient.invalidateQueries({ queryKey: ['scores'] })
     navigate('/scores/0')
   }
 
