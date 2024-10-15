@@ -1,3 +1,3 @@
 export default function Scores() {
-  return <></>
+  return <p>Scores!</p>
 }
