@@ -19,7 +19,7 @@ export default function Scores() {
     setForm(() => e.target.value)
   }
 
-  function handleSubmit (e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     // todo: api call
     navigate('/scores/0')
@@ -50,8 +50,14 @@ export default function Scores() {
 
         {score > 0 && (
           <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor='name'>Enter your name: </label>
-            <input type="text" id="name" name="name" value={form} onChange={(e) => handleChange(e)}/>
+            <label htmlFor="name">Enter your name: </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={form}
+              onChange={(e) => handleChange(e)}
+            />
           </form>
         )}
       </>
