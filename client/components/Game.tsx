@@ -3,6 +3,7 @@ import { Cryptid } from '../../models/models'
 import { useState } from 'react'
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
+import Modal from './Modal'
 
 interface Props {
   cryptid: Cryptid
@@ -36,7 +37,11 @@ export default function Game({ cryptid }: Props) {
   }
 
   return showModal ? (
-    <p>'Modal!'</p>
+    <Modal
+      cryptid={cryptid}
+      showModal={showModal}
+      setShowModal={setShowModal}
+    />
   ) : (
     <section>
       <p>Score: {score}</p>
