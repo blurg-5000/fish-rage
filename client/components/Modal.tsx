@@ -22,9 +22,9 @@ export default function Modal({
 
   return (
     showModal && (
-      <section className="flex flex-col items-center justify-center rounded-sm border-2 border-solid border-black">
+      <section className="relative m-10 flex flex-col items-center justify-center rounded-sm border-2 border-solid border-black p-6">
         <button
-          className="rounded-lg  border-2 border-solid border-black p-2"
+          className="absolute right-2 top-2 border-solid border-black bg-black p-2 text-white"
           aria-label="close"
           onClick={closeModal}
         >
