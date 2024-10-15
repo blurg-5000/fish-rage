@@ -31,7 +31,11 @@ export default function Modal({
           x
         </button>
         <h1>You caught: {cryptid.name}!</h1>
-        <img src={`${cryptid.image}`} alt={cryptid.name} />
+        <img
+          src={`./cryptid-images/${cryptid.image}`}
+          className="max-h-screen-md h-auto w-auto max-w-screen-md object-contain"
+          alt={cryptid.name}
+        />
         <p>You've earned {cryptid.points} points</p>
       </section>
     )
