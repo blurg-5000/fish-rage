@@ -9,6 +9,6 @@ export default createRoutesFromElements(
   <Route path="/" element={<Layout />}>
     <Route index element={<HowToPlay />} />
     <Route path="/fishing" element={<Fishing />} />
-    <Route path="/scores" element={<Scores />} />
+    <Route path="/scores/:score" element={<Scores />} />
   </Route>,
 )

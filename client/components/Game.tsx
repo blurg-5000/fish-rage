@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomRange } from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
