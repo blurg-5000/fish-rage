@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-
   try {
     await db.addScore(req.body)
     res.sendStatus(200)
