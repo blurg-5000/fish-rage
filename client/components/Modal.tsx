@@ -22,8 +22,12 @@ export default function Modal({
 
   return (
     showModal && (
-      <section>
-        <button aria-label="close" onClick={closeModal}>
+      <section className="flex flex-col items-center justify-center rounded-sm border-2 border-solid border-black">
+        <button
+          className="rounded-lg  border-2 border-solid border-black p-2"
+          aria-label="close"
+          onClick={closeModal}
+        >
           x
         </button>
         <h1>You caught: {cryptid.name}!</h1>

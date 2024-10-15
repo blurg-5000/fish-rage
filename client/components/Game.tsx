@@ -104,16 +104,16 @@ export default function Game({ cryptid }: Props) {
     setMinions(() => tempArr)
   }
 
-  return showModal ? (
-    // TODO: pause minion generation when modal is shown
-    <Modal
-      cryptid={cryptid}
-      showModal={showModal}
-      setShowModal={setShowModal}
-      getNewFish={getNewFish}
-    />
-  ) : (
+  return (
     <section>
+      {showModal && (
+        <Modal
+          cryptid={cryptid}
+          showModal={showModal}
+          setShowModal={setShowModal}
+          getNewFish={getNewFish}
+        />
+      )}
       <p>Score: {score}</p>
       <p>Boat health: {boatHealth}</p>
       <p>Cryptid: {cryptid.name}</p>
