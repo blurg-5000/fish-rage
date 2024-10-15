@@ -107,12 +107,14 @@ export default function Game({ cryptid }: Props) {
   return (
     <section>
       {showModal && (
-        <Modal
-          cryptid={cryptid}
-          showModal={showModal}
-          setShowModal={setShowModal}
-          getNewFish={getNewFish}
-        />
+        <section className="fixed inset-0 z-10 h-full w-full bg-red-600 bg-opacity-50 backdrop-blur-sm">
+          <Modal
+            cryptid={cryptid}
+            showModal={showModal}
+            setShowModal={setShowModal}
+            getNewFish={getNewFish}
+          />
+        </section>
       )}
       <p>Score: {score}</p>
       <p>Boat health: {boatHealth}</p>
