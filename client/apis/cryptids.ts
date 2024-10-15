@@ -12,6 +12,6 @@ export function getCryptids(): Promise<Cryptid> {
       array[i] = array[j]
       array[j] = temp
     }
-  return array[0]
+    return array[0]
   })
 }
