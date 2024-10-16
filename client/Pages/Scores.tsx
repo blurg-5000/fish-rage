@@ -50,7 +50,7 @@ export default function Scores() {
           </tbody>
         </table>
 
-        {score > 0 && (
+        {score > data[9].score && (
           <form onSubmit={(e) => handleSubmit(e)}>
             <label htmlFor="name">Enter your name: </label>
             <input
