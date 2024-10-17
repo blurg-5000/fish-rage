@@ -14,7 +14,7 @@ export default function Scores() {
   const navigate = useNavigate()
 
   const rawScore = useParams().score || 0
-  let score = isNaN(+rawScore) ? 0 : +rawScore
+  const score = isNaN(+rawScore) ? 0 : +rawScore
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm(() => e.target.value)

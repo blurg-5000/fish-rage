@@ -4,6 +4,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomRange } from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
+import HorizontalLifeBar from '../components/HorizontalLifeBar'
+import VerticalLifeBar from '../components/VerticalLifeBar'
+import Boat from './Boat'
+import Modal from './Modal'
 
 interface Props {
   cryptid: Cryptid
@@ -14,6 +18,7 @@ export default function Game({ cryptid }: Props) {
   const [boatHealth, setBoatHealth] = useState(100)
   const [lineHealth, setLineHealth] = useState(100) //todo
   const [catchProgress, setCatchProgress] = useState(0) // todo
+  const [showModal, setShowModal] = useState(false)
   const [minions, setMinions] = useState([
     // keep track of minions for rendering
     false,
@@ -30,6 +35,7 @@ export default function Game({ cryptid }: Props) {
     false,
     false,
     false,
+    ,
     false,
   ])
   const queryClient = useQueryClient()
@@ -82,8 +88,12 @@ export default function Game({ cryptid }: Props) {
   }, [getBeatenUp, minions])
 
   function finishFishing() {
-    // do the toast alert to show details of the cryptid they caught
     setScore((currentScore) => currentScore + cryptid.points)
+    setShowModal(true)
+  }
+
+  function getNewFish() {
+    // moved to a new function so this doesn't trigger until the modal is closed
     queryClient.invalidateQueries({ queryKey: ['cryptids'] }) // get a new cryptid to fish for
   }
 
@@ -95,7 +105,17 @@ export default function Game({ cryptid }: Props) {
   }
 
   return (
-    <>
+    <section>
+      {showModal && (
+        <section className="fixed inset-0 z-10 h-full w-full bg-red-600 bg-opacity-50 backdrop-blur-sm">
+          <Modal
+            cryptid={cryptid}
+            showModal={showModal}
+            setShowModal={setShowModal}
+            getNewFish={getNewFish}
+          />
+        </section>
+      )}
       <p>Score: {score}</p>
       <p>Boat health: {boatHealth}</p>
       <p>Cryptid: {cryptid.name}</p>
@@ -111,6 +131,29 @@ export default function Game({ cryptid }: Props) {
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
       <button onClick={getBeatenUp}>get beaten up</button> {/* temp */}
-    </>
+      <div className="flex w-full justify-center"></div>
+      <div className="flex flex-row">
+        <div className="absolute pl-2">
+          {/* LineHealth */}
+          <p className="text-center">Line Health</p>
+          <VerticalLifeBar color="blue" value={lineHealth} />
+        </div>
+        <div className="absolute pl-28">
+          {/* CatchProgress */}
+          <p className="text-center">Catch Progress</p>
+          <VerticalLifeBar color="red" value={catchProgress} />
+        </div>
+      </div>
+      {/* Boat Health */}
+      <div className="flex flex-col pl-[30%]">
+        {/* BOAT svg's */}
+        <div className="">
+          <div>
+            <Boat decay={boatHealth} />
+          </div>
+          <HorizontalLifeBar color="green" value={boatHealth} />
+        </div>
+      </div>
+    </section>
   )
 }
