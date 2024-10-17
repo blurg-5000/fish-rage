@@ -10,3 +10,7 @@ export function getRandomCryptid(arr: Cryptid[]): Cryptid {
   }
   return array[0]
 }
+
+export function randomRange(myMin: number, myMax: number): number {
+  return Math.floor(Math.random() * (myMax - myMin + 1)) + myMin
+}

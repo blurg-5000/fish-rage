@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { randomRange } from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
@@ -55,8 +55,7 @@ export default function Game({ cryptid }: Props) {
   }, [])
 
   if (boatHealth === 0) {
-    // todo: set score to zero because you ded.
-    navigate('/scores')
+    navigate('/scores/0')
   }
 
   useEffect(() => {
