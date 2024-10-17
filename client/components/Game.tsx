@@ -35,34 +35,40 @@ export default function Game({ cryptid }: Props) {
 
   return (
     <>
-      <p>Score: {score}</p>
-      <p>Boat health: {boatHealth}</p>
-      <p>Cryptid: {cryptid.name}</p>
-      <button onClick={finishFishing}>fish</button>
-      <button onClick={getBeatenUp}>get beaten up</button>
-      <div className="flex w-full justify-center"></div>
-      <div className="flex flex-row">
-        <div className="absolute pl-2">
-          {/* LineHealth */}
-          <p className="text-center">Line Health</p>
-          <VerticalLifeBar color="blue" value={lineHealth} />
-        </div>
-        <div className="absolute pl-28">
-          {/* CatchProgress */}
-          <p className="text-center">Catch Progress</p>
-          <VerticalLifeBar color="red" value={catchProgress} />
-        </div>
-      </div>
-      {/* Boat Health */}
-      <div className="flex flex-col pl-[30%]">
-        {/* BOAT svg's */}
-        <div className="">
-          <div>
-            <Boat decay={boatHealth} />
+      <section className="m-8">
+        <p className="text-white">Score: {score}</p>
+        <p className="text-white">Boat health: {boatHealth}</p>
+        <p className="text-white">Cryptid: {cryptid.name}</p>
+        <button className="p-2 text-white" onClick={finishFishing}>
+          fish
+        </button>
+        <button className="text-white" onClick={getBeatenUp}>
+          get beaten up
+        </button>
+        <div className="flex w-full justify-center"></div>
+        <div className="flex">
+          <div className="absolute pl-2">
+            {/* LineHealth */}
+            <p className="text-center text-white">Line Health</p>
+            <VerticalLifeBar color="blue" value={lineHealth} />
           </div>
-          <HorizontalLifeBar color="green" value={boatHealth} />
+          <div className="absolute pl-28">
+            {/* CatchProgress */}
+            <p className="text-center text-white">Catch Progress</p>
+            <VerticalLifeBar color="red" value={catchProgress} />
+          </div>
         </div>
-      </div>
+        {/* Boat Health */}
+        <div className="flex flex-col pl-[30%]">
+          {/* BOAT svg's */}
+          <div className="">
+            <div>
+              <Boat decay={boatHealth} />
+            </div>
+            <HorizontalLifeBar color="green" value={boatHealth} />
+          </div>
+        </div>
+      </section>
     </>
   )
 }
