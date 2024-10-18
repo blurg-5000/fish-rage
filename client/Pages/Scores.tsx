@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { addNewScore, getScores } from '../apis/scores'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Score } from '../../models/models'
 
 export default function Scores() {
@@ -62,6 +62,12 @@ export default function Scores() {
             />
           </form>
         )}
+        {/* Basic Re-Play button  */}
+        <div className="flex justify-center ">
+          <button className="rounded-md border-2 border-solid border-red-600 p-2 px-6 text-sm text-red-600">
+            <Link to="/fishing">Re-Play</Link>
+          </button>
+        </div>
       </>
     )
   }
