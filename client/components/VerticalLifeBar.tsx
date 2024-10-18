@@ -4,6 +4,7 @@ interface Props {
 }
 
 export default function VerticalLifeBar({ color, value }: Props) {
+  // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
   const fullHeight = 98
   const max = 100
   const whiteValue = 100 - value

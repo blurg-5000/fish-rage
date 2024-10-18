@@ -1,13 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { randomRange } from '../helperFuncs'
+import { useCallback, useEffect, useState } from 'react'
+import { randomRange, getRandomPositionAroundCenter } from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
 import Boat from './Boat'
 import Modal from './Modal'
+
+interface MinionState {
+  alive: boolean
+  position: { top: number; left: number }
+}
 
 interface Props {
   cryptid: Cryptid
@@ -16,32 +21,22 @@ interface Props {
 export default function Game({ cryptid }: Props) {
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
-  const [lineHealth, setLineHealth] = useState(100) //todo
-  const [catchProgress, setCatchProgress] = useState(0) // todo
+  const [lineHealth, setLineHealth] = useState(100)
+  const [catchProgress, setCatchProgress] = useState(0)
   const [showModal, setShowModal] = useState(false)
-  const [minions, setMinions] = useState([
-    // keep track of minions for rendering
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
+  const [minions, setMinions] = useState<MinionState[]>([
+    { alive: false, position: { top: 0, left: 0 } },
+    { alive: false, position: { top: 0, left: 0 } },
+    { alive: false, position: { top: 0, left: 0 } },
+    { alive: false, position: { top: 0, left: 0 } },
+    { alive: false, position: { top: 0, left: 0 } },
+    { alive: false, position: { top: 0, left: 0 } },
   ])
-  const minionsRef = useRef([
-    // keep track of minions for the attack interval
-    false,
-    false,
-    false,
-    false,
-    false,
-    ,
-    false,
-  ])
+
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
-  const spawnRate = [1, 2, 3, 4].includes(cryptid.rage) // rage determines the speed at which the minions will spawn
+  const spawnRate = [1, 2, 3, 4].includes(cryptid.rage)
     ? 3
     : [5, 6, 7].includes(cryptid.rage)
       ? 2
@@ -49,7 +44,12 @@ export default function Game({ cryptid }: Props) {
   const minionDamage = 10
   const damageFrequency = 2000
 
-  // boat loses x damage every 2 seconds
+  // Center position - Could be the center of the screen or near the boat
+  const centerPosition = {
+    top: window.innerHeight / 2 - 150, // Adjust based on boat position if needed
+    left: window.innerWidth / 2 - 75, // Adjust based on boat position if needed
+  }
+
   const getBeatenUp = useCallback(() => {
     setBoatHealth((prevHealth) => prevHealth - minionDamage)
   }, [])
@@ -61,29 +61,38 @@ export default function Game({ cryptid }: Props) {
   useEffect(() => {
     const spawnInterval = setInterval(() => {
       const idle = minions.reduce(
-        // finds the indexes of the minions which aren't already in the boat
         (available: number[], minion, i) =>
-          minion === false ? [...available, i] : available,
+          !minion.alive ? [...available, i] : available,
         [],
       )
+
       if (idle.length > 0) {
-        // only do this bit if there are any idle minions
-        const idleMinion = idle[randomRange(0, idle.length - 1)] // pick a rando idle minion
+        const idleMinion = idle[randomRange(0, idle.length - 1)]
+
+        // Set initial minion position to be farther from the boat
+        const randomPosition = getRandomPositionAroundCenter(
+          centerPosition,
+          400,
+          500,
+        )
+
         const tempArr = [...minions]
-        tempArr[idleMinion] = true // make that minion active
+        tempArr[idleMinion] = { alive: true, position: randomPosition }
+
         setMinions(() => tempArr)
       }
     }, spawnRate * 1000)
+
     return () => clearInterval(spawnInterval)
   }, [minions, spawnRate])
 
-  // boat takes damage if there are any active minions on it. Number of minions doesn't affect damage.
   useEffect(() => {
     const attackInterval = setInterval(() => {
-      if (minions.some((val) => val === true)) {
+      if (minions.some((val) => val.alive)) {
         getBeatenUp()
       }
     }, damageFrequency)
+
     return () => clearInterval(attackInterval)
   }, [getBeatenUp, minions])
 
@@ -93,14 +102,12 @@ export default function Game({ cryptid }: Props) {
   }
 
   function getNewFish() {
-    // moved to a new function so this doesn't trigger until the modal is closed
-    queryClient.invalidateQueries({ queryKey: ['cryptids'] }) // get a new cryptid to fish for
+    queryClient.invalidateQueries({ queryKey: ['cryptids'] })
   }
 
-  function killMinion(minion: number) {
-    // todo: update for useRef
+  function killMinion(minionId: number) {
     const tempArr = [...minions]
-    tempArr[minion] = false
+    tempArr[minionId] = { ...tempArr[minionId], alive: false }
     setMinions(() => tempArr)
   }
 
@@ -119,38 +126,36 @@ export default function Game({ cryptid }: Props) {
       <p>Score: {score}</p>
       <p>Boat health: {boatHealth}</p>
       <p>Cryptid: {cryptid.name}</p>
-      <div className="boat">
-        {minions.map((minionState, i) => (
-          <Minion
-            key={`m${i}`}
-            alive={minionState}
-            minionId={i}
-            killMinion={killMinion}
-          />
-        ))}
+      <div className="boat relative">
+        {minions.map((minionState, i) =>
+          minionState.alive ? (
+            <Minion
+              key={`m${i}`}
+              alive={minionState.alive}
+              minionId={i}
+              killMinion={killMinion}
+              initialPosition={minionState.position}
+              targetPosition={centerPosition} // Center of the screen or near the boat
+            />
+          ) : null,
+        )}
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
       <button onClick={getBeatenUp}>get beaten up</button> {/* temp */}
       <div className="flex w-full justify-center"></div>
       <div className="flex flex-row">
         <div className="absolute pl-2">
-          {/* LineHealth */}
           <p className="text-center">Line Health</p>
           <VerticalLifeBar color="blue" value={lineHealth} />
         </div>
         <div className="absolute pl-28">
-          {/* CatchProgress */}
           <p className="text-center">Catch Progress</p>
           <VerticalLifeBar color="red" value={catchProgress} />
         </div>
       </div>
-      {/* Boat Health */}
       <div className="flex flex-col pl-[30%]">
-        {/* BOAT svg's */}
-        <div className="">
-          <div>
-            <Boat decay={boatHealth} />
-          </div>
+        <div>
+          <Boat decay={boatHealth} />
           <HorizontalLifeBar color="green" value={boatHealth} />
         </div>
       </div>
