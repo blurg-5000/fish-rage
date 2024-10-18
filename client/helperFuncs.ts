@@ -14,3 +14,18 @@ export function getRandomCryptid(arr: Cryptid[]): Cryptid {
 export function randomRange(myMin: number, myMax: number): number {
   return Math.floor(Math.random() * (myMax - myMin + 1)) + myMin
 }
+
+export function getRandomPositionAroundCenter(
+  center: { top: number; left: number },
+  minDistance: number,
+  maxDistance: number,
+): { top: number; left: number } {
+  const angle = Math.random() * 2 * Math.PI // Random angle in radians
+  const distance = minDistance + Math.random() * (maxDistance - minDistance) // Random distance between minDistance and maxDistance
+
+  // Calculate the x and y position based on the angle and distance
+  const top = center.top + Math.sin(angle) * distance
+  const left = center.left + Math.cos(angle) * distance
+
+  return { top, left }
+}

@@ -4,7 +4,7 @@ export default function Layout() {
   // todo: add query to store fishing basket
 
   return (
-    <div className="bg-ocean h-screen bg-cover">
+    <div className="h-screen bg-ocean bg-cover text-white">
       <div className="flex h-screen flex-col justify-between bg-black bg-opacity-60">
         <header className="flex flex-col items-center justify-center">
           <h1 className="font-heading text-2xl text-red-600">Fish Rage!</h1>
