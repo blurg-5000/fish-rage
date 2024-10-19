@@ -21,7 +21,7 @@ interface Props {
 export default function Game({ cryptid }: Props) {
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
-  const [lineHealth, setLineHealth] = useState(100)
+  const [lineHealth, setLineHealth] = useState(100 )
   const [catchProgress, setCatchProgress] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const [minions, setMinions] = useState<MinionState[]>(
@@ -62,23 +62,26 @@ export default function Game({ cryptid }: Props) {
 
   useEffect(() => {
     const spawnInterval = setInterval(() => {
-      const idle = minions
-        .map((minion, i) => (!minion.alive ? i : -1))
-        .filter((i) => i !== -1)
+      const idle = minions.reduce(
+        (available: number[], minion, i) =>
+          !minion.alive ? [...available, i] : available,
+        [],
+      )
 
       if (idle.length > 0) {
         const idleMinion = idle[randomRange(0, idle.length - 1)]
+
+        // Set initial minion position to be farther from the boat
         const randomPosition = getRandomPositionAroundCenter(
           centerPosition,
           400,
           500,
         )
 
-        setMinions((prevMinions) => {
-          const newMinions = [...prevMinions]
-          newMinions[idleMinion] = { alive: true, position: randomPosition }
-          return newMinions
-        })
+        const tempArr = [...minions]
+        tempArr[idleMinion] = { alive: true, position: randomPosition }
+
+        setMinions(() => tempArr)
       }
     }, spawnRate * 1000)
 
@@ -170,7 +173,11 @@ export default function Game({ cryptid }: Props) {
         </div>
         <div className="absolute pl-28">
           <p className="text-center">Catch Progress</p>
-          <VerticalLifeBar color="red" value={catchProgress} />
+          <VerticalLifeBar
+            color="red"
+            value={catchProgress}
+            intensity={cryptid.rage}
+          />
         </div>
       </div>
       <div className="flex flex-col pl-[30%]">

@@ -31,7 +31,7 @@ export default function Minion({
 
     const progress = 2 - distanceFromCenter / totalDistance // Progress increases as it gets closer
 
-    const sizeFactor = 0.5 + progress * 1 // Size grows from 0.5 to 1.5
+    const sizeFactor = 0.1 + progress * 1 // Size grows from 0.5 to 1.5
     return sizeFactor
   }
 
@@ -68,16 +68,24 @@ export default function Minion({
     return (
       <button
         onClick={() => killMinion(minionId)}
-        className="absolute h-10 w-10 rounded-full bg-red-600 transition-all duration-[5s]" // This uses Tailwind for smooth animation
+        // Animate wiggle is a custom tailwind config
+        className="animate-wiggle absolute rounded-full transition-all duration-[5s]" // This uses Tailwind for smooth animation
         style={{
           position: 'absolute',
+          // The size (height and width) of the crab changes dynamically based on the size state
+          height: `${size * 5}rem`,
+          width: `${size * 5}rem`,
           top: `${position.top}px`,
           left: `${position.left}px`,
-          transform: `scale(${size})`, // Grow the size based on distance
-          transition: 'transform 0.1s linear', // Smooth scaling animation
+          transition: 'transform 0.1s linear', // Smoother animation
+          backgroundImage: 'url("/sprites/crab_sprite.png")',
+          backgroundPosition: 'center', // Center the image
+          backgroundRepeat: 'no-repeat', // Do not repeat the image
+          backgroundSize: 'cover', // Resize the background image to cover
         }}
       >
-        M{`${minionId + 1}`}
+        {/* Shows the minion Id - maybe useful for debugging? */}
+        {/* {`${minionId + 1}`} */}
       </button>
     )
 }
