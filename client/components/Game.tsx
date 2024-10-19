@@ -1,7 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
 import { useCallback, useEffect, useState } from 'react'
-import { randomRange, getRandomPositionAroundCenter } from '../helperFuncs'
+import {
+  randomRange,
+  getRandomPositionAroundCenter,
+  playAudio,
+} from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
@@ -108,6 +112,7 @@ export default function Game({ cryptid }: Props) {
 
   function finishFishing() {
     setScore((currentScore) => currentScore + cryptid.points)
+    playAudio('audio/monster_growl.mp3')
     setShowModal(true)
   }
 
