@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { CatchProgress, LineHealth } from './Game'
+import { playAudio } from '../helperFuncs'
 
 interface Props {
   color: string
@@ -28,6 +29,7 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
       if (intensity)
         if (intensity >= 7 && intensity <= 10) {
           setRage('high')
+          playAudio('audio/high_rage.mp3')
         } else if (intensity >= 4 && intensity <= 6) {
           setRage('medium')
         } else if (intensity >= 1 && intensity <= 3) {
