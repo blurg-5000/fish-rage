@@ -45,20 +45,20 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
         ? 'animate-wriggleMedium'
         : 'animate-wriggleMild'
 
-  console.log(animationClass)
+  //console.log(animationClass)
+
   const fullHeight = 98
   const max = 100
   const whiteValue = 100 - val
   const percent = whiteValue / max
   // Dynamic value gets put into the dynamic svg - rect
-  const dynamicValue = Math.floor(percent * fullHeight)
-
+  let dynamicValue = Math.floor(percent * fullHeight)
   // position of the cryptid sprite, for catch progress bar
-  const imagePosition = dynamicValue - 5
+  const imagePosition = val - 10
 
-  console.log(rage)
+  console.log('imageposition', imagePosition)
 
-  if ('catchProgress' in value) console.log(dynamicValue)
+  if ('catchProgress' in value) console.log('dynamic value', dynamicValue)
   return (
     <>
       <div>
@@ -101,7 +101,7 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
               left: '53%',
               width: '70px',
               color: 'black',
-              bottom: `${imagePosition}px`,
+              bottom: `${imagePosition}%`,
               transform: 'translateX(7%)',
             }}
           />
