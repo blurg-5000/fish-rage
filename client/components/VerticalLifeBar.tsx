@@ -1,16 +1,64 @@
+import { useEffect, useState } from 'react'
+import { CatchProgress, LineHealth } from './Game'
+
 interface Props {
   color: string
-  value: number
+  value: LineHealth | CatchProgress
+  intensity?: number
 }
 
-export default function VerticalLifeBar({ color, value }: Props) {
+export default function VerticalLifeBar({ color, value, intensity }: Props) {
+  const [sprite, setSprite] = useState(false)
+  const [rage, setRage] = useState<string | null>(null)
+
+  console.log('intensity', intensity)
+
   // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
+  let val: number
+
+  if ('lineHealth' in value) {
+    val = value.lineHealth
+  } else {
+    val = value.catchProgress
+  }
+
+  useEffect(() => {
+    if ('catchProgress' in value) {
+      setSprite(true)
+      if (intensity)
+        if (intensity >= 7 && intensity <= 10) {
+          setRage('high')
+        } else if (intensity >= 4 && intensity <= 6) {
+          setRage('medium')
+        } else if (intensity >= 1 && intensity <= 3) {
+          setRage('low')
+        }
+    } else {
+      setSprite(false)
+    }
+  }, [value])
+
+  const animationClass =
+    rage === 'high'
+      ? 'animate-wriggleAggressive'
+      : rage === 'medium'
+        ? 'animate-wriggleMedium'
+        : 'animate-wriggleMild'
+
+  //console.log(animationClass)
+
   const fullHeight = 98
   const max = 100
-  const whiteValue = 100 - value
+  const whiteValue = 100 - val
   const percent = whiteValue / max
   // Dynamic value gets put into the dynamic svg - rect
-  const dynamicValue = Math.floor(percent * fullHeight)
+  let dynamicValue = Math.floor(percent * fullHeight)
+  // position of the cryptid sprite, for catch progress bar
+  const imagePosition = val - 10
+
+  console.log('imageposition', imagePosition)
+
+  if ('catchProgress' in value) console.log('dynamic value', dynamicValue)
   return (
     <>
       <div>
@@ -43,6 +91,21 @@ export default function VerticalLifeBar({ color, value }: Props) {
             />
           </svg>
         </div>
+        {sprite && (
+          <img
+            src="/sprites/cryptid_sprite.png"
+            alt="Sprite"
+            className={`${animationClass}`}
+            style={{
+              position: 'absolute',
+              left: '53%',
+              width: '70px',
+              color: 'black',
+              bottom: `${imagePosition}%`,
+              transform: 'translateX(7%)',
+            }}
+          />
+        )}
       </div>
     </>
   )
