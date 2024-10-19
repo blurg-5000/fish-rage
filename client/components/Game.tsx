@@ -31,6 +31,11 @@ export interface CatchProgress {
 }
 
 export default function Game({ cryptid }: Props) {
+  const [explosion, setExplosion] = useState<{
+    visible: boolean
+    position: { top: number; left: number }
+  } | null>(null)
+
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
   const [lineHealth, setLineHealth] = useState<LineHealth>({ lineHealth: 100 })
@@ -123,8 +128,18 @@ export default function Game({ cryptid }: Props) {
 
   function killMinion(minionId: number) {
     const tempArr = [...minions]
+    const minionPosition = tempArr[minionId].position // Get the minion's position
     tempArr[minionId] = { ...tempArr[minionId], alive: false }
     setMinions(() => tempArr)
+    playAudio('audio/explosion.mp3')
+
+    // Set the explosion state to show the explosion at the minion's position
+    setExplosion({ visible: true, position: minionPosition })
+
+    // Hide the explosion after 0.5 seconds
+    setTimeout(() => {
+      setExplosion(null)
+    }, 500) // Adjust the duration as needed
   }
 
   return (
@@ -154,6 +169,21 @@ export default function Game({ cryptid }: Props) {
               targetPosition={centerPosition} // Center of the screen or near the boat
             />
           ) : null,
+        )}
+        {explosion && explosion.visible && (
+          <div
+            style={{
+              position: 'absolute',
+              top: `${explosion.position.top}px`,
+              left: `${explosion.position.left}px`,
+              width: '100px', // Adjust size as needed
+              height: '100px', // Adjust size as needed
+              // not currently working
+              backgroundImage: 'explosion.gif', // Set your explosion image path
+              backgroundSize: 'cover',
+              pointerEvents: 'none', // Prevent interactions while showing the explosion
+            }}
+          />
         )}
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
