@@ -66,6 +66,7 @@ export default function Game({ cryptid }: Props) {
 
   const getBeatenUp = useCallback(() => {
     setBoatHealth((prevHealth) => prevHealth - minionDamage)
+    playAudio('/audio/crab_bite.wav')
   }, [])
 
   if (boatHealth === 0) {
