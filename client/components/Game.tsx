@@ -18,11 +18,21 @@ interface Props {
   cryptid: Cryptid
 }
 
+export interface LineHealth {
+  lineHealth: number
+}
+
+export interface CatchProgress {
+  catchProgress: number
+}
+
 export default function Game({ cryptid }: Props) {
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
-  const [lineHealth, setLineHealth] = useState(100)
-  const [catchProgress, setCatchProgress] = useState(0)
+  const [lineHealth, setLineHealth] = useState<LineHealth>({ lineHealth: 100 })
+  const [catchProgress, setCatchProgress] = useState<CatchProgress>({
+    catchProgress: 0,
+  })
   const [showModal, setShowModal] = useState(false)
   const [minions, setMinions] = useState<MinionState[]>([
     { alive: false, position: { top: 0, left: 0 } },
@@ -58,33 +68,33 @@ export default function Game({ cryptid }: Props) {
     navigate('/scores/0')
   }
 
-  useEffect(() => {
-    const spawnInterval = setInterval(() => {
-      const idle = minions.reduce(
-        (available: number[], minion, i) =>
-          !minion.alive ? [...available, i] : available,
-        [],
-      )
+  // useEffect(() => {
+  //   const spawnInterval = setInterval(() => {
+  //     const idle = minions.reduce(
+  //       (available: number[], minion, i) =>
+  //         !minion.alive ? [...available, i] : available,
+  //       [],
+  //     )
 
-      if (idle.length > 0) {
-        const idleMinion = idle[randomRange(0, idle.length - 1)]
+  //     if (idle.length > 0) {
+  //       const idleMinion = idle[randomRange(0, idle.length - 1)]
 
-        // Set initial minion position to be farther from the boat
-        const randomPosition = getRandomPositionAroundCenter(
-          centerPosition,
-          400,
-          500,
-        )
+  //       // Set initial minion position to be farther from the boat
+  //       const randomPosition = getRandomPositionAroundCenter(
+  //         centerPosition,
+  //         400,
+  //         500,
+  //       )
 
-        const tempArr = [...minions]
-        tempArr[idleMinion] = { alive: true, position: randomPosition }
+  //       const tempArr = [...minions]
+  //       tempArr[idleMinion] = { alive: true, position: randomPosition }
 
-        setMinions(() => tempArr)
-      }
-    }, spawnRate * 1000)
+  //       setMinions(() => tempArr)
+  //     }
+  //   }, spawnRate * 1000)
 
-    return () => clearInterval(spawnInterval)
-  }, [minions, spawnRate])
+  //   return () => clearInterval(spawnInterval)
+  // }, [minions, spawnRate])
 
   useEffect(() => {
     const attackInterval = setInterval(() => {

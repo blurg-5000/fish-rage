@@ -1,13 +1,33 @@
+import { useEffect, useState } from 'react'
+import { CatchProgress, LineHealth } from './Game'
+
 interface Props {
   color: string
-  value: number
+  value: LineHealth | CatchProgress
 }
 
 export default function VerticalLifeBar({ color, value }: Props) {
+  const [sprite, setSprite] = useState(false)
   // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
+  let val: number
+
+  if ('lineHealth' in value) {
+    val = value.lineHealth
+  } else {
+    val = value.catchProgress
+  }
+
+  useEffect(() => {
+    if ('catchProgress' in value) {
+      setSprite(true)
+    } else {
+      setSprite(false)
+    }
+  }, [value])
+
   const fullHeight = 98
   const max = 100
-  const whiteValue = 100 - value
+  const whiteValue = 100 - val
   const percent = whiteValue / max
   // Dynamic value gets put into the dynamic svg - rect
   const dynamicValue = Math.floor(percent * fullHeight)
