@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CatchProgress, LineHealth } from './Game'
 import { playAudio } from '../helperFuncs'
 
@@ -11,6 +11,7 @@ interface Props {
 export default function VerticalLifeBar({ color, value, intensity }: Props) {
   const [sprite, setSprite] = useState(false)
   const [rage, setRage] = useState<string | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
 
   console.log('intensity', intensity)
 
@@ -29,7 +30,6 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
       if (intensity)
         if (intensity >= 7 && intensity <= 10) {
           setRage('high')
-          playAudio('audio/high_rage.mp3')
         } else if (intensity >= 4 && intensity <= 6) {
           setRage('medium')
         } else if (intensity >= 1 && intensity <= 3) {
@@ -38,7 +38,32 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
     } else {
       setSprite(false)
     }
-  }, [value])
+  }, [value, intensity])
+
+  // Manage audio playback
+  useEffect(() => {
+    if (rage === 'high') {
+      // Create and play audio if it doesn't already exist
+      if (!audioRef.current) {
+        audioRef.current = new Audio('audio/high_rage.mp3')
+      }
+      audioRef.current.play()
+    } else {
+      // Stop the audio if rage is not high
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0 // Reset playback position
+      }
+    }
+
+    // Clean up audio on component unmount
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
+      }
+    }
+  }, [rage]) // Add rage to dependency array
 
   const animationClass =
     rage === 'high'
