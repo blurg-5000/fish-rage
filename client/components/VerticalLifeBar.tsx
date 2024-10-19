@@ -4,10 +4,15 @@ import { CatchProgress, LineHealth } from './Game'
 interface Props {
   color: string
   value: LineHealth | CatchProgress
+  intensity?: number
 }
 
-export default function VerticalLifeBar({ color, value }: Props) {
+export default function VerticalLifeBar({ color, value, intensity }: Props) {
   const [sprite, setSprite] = useState(false)
+  const [rage, setRage] = useState<string | null>(null)
+
+  console.log('intensity', intensity)
+
   // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
   let val: number
 
@@ -20,11 +25,27 @@ export default function VerticalLifeBar({ color, value }: Props) {
   useEffect(() => {
     if ('catchProgress' in value) {
       setSprite(true)
+      if (intensity)
+        if (intensity >= 7 && intensity <= 10) {
+          setRage('high')
+        } else if (intensity >= 4 && intensity <= 6) {
+          setRage('medium')
+        } else if (intensity >= 1 && intensity <= 3) {
+          setRage('low')
+        }
     } else {
       setSprite(false)
     }
   }, [value])
 
+  const animationClass =
+    rage === 'high'
+      ? 'animate-wriggleAggressive'
+      : rage === 'medium'
+        ? 'animate-wriggleMedium'
+        : 'animate-wriggleMild'
+
+  console.log(animationClass)
   const fullHeight = 98
   const max = 100
   const whiteValue = 100 - val
@@ -34,6 +55,8 @@ export default function VerticalLifeBar({ color, value }: Props) {
 
   // position of the cryptid sprite, for catch progress bar
   const imagePosition = dynamicValue - 5
+
+  console.log(rage)
 
   if ('catchProgress' in value) console.log(dynamicValue)
   return (
@@ -72,6 +95,7 @@ export default function VerticalLifeBar({ color, value }: Props) {
           <img
             src="/sprites/cryptid_sprite.png"
             alt="Sprite"
+            className={`${animationClass}`}
             style={{
               position: 'absolute',
               left: '50%',

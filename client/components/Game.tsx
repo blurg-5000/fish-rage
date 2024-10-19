@@ -160,7 +160,11 @@ export default function Game({ cryptid }: Props) {
         </div>
         <div className="absolute pl-28">
           <p className="text-center">Catch Progress</p>
-          <VerticalLifeBar color="red" value={catchProgress} />
+          <VerticalLifeBar
+            color="red"
+            value={catchProgress}
+            intensity={cryptid.rage}
+          />
         </div>
       </div>
       <div className="flex flex-col pl-[30%]">

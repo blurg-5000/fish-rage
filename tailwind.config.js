@@ -18,6 +18,26 @@ export default {
       backgroundImage: {
         ocean: "url('/ocean_bg.png')",
       },
+
+      keyframes: {
+        wriggleMild: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(3deg)' },
+        },
+        wriggleMedium: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(6deg)' },
+        },
+        wriggleAggressive: {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(12deg)' },
+        },
+      },
+      animation: {
+        wriggleMild: 'wriggleMild 0.6s ease-in-out infinite',
+        wriggleMedium: 'wriggleMedium 0.4s ease-in-out infinite',
+        wriggleAggressive: 'wriggleAggressive 0.2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
