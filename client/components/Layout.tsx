@@ -1,7 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
   // todo: add query to store fishing basket
+  useQuery({
+queryKey: ['basket'],
+queryFn: () => [] as string[]
+  })
 
   return (
     <div className="h-screen bg-ocean bg-cover text-white">
