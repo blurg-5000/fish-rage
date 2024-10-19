@@ -11,6 +11,7 @@ export default function VerticalLifeBar({ color, value }: Props) {
   const percent = whiteValue / max
   // Dynamic value gets put into the dynamic svg - rect
   const dynamicValue = Math.floor(percent * fullHeight)
+
   return (
     <>
       <div>
