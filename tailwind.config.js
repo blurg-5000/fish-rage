@@ -18,6 +18,19 @@ export default {
       backgroundImage: {
         ocean: "url('/ocean_bg.png')",
       },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': {
+            transform: 'rotate(-3deg)',
+          },
+          '50%': {
+            transform: 'rotate(3deg)',
+          },
+        },
+      },
+      animation: {
+        wiggle: 'wiggle 0.2s ease-in-out infinite',
+      },
     },
   },
   plugins: [],
