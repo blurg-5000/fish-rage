@@ -29,3 +29,8 @@ export function getRandomPositionAroundCenter(
 
   return { top, left }
 }
+
+export function playAudio(file: string) {
+  let sound = new Audio(file)
+  sound.play()
+}

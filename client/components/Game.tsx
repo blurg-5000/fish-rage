@@ -8,6 +8,7 @@ import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
 import Boat from './Boat'
 import Modal from './Modal'
+import { playAudio } from '../helperFuncs'
 
 interface MinionState {
   alive: boolean
@@ -19,9 +20,14 @@ interface Props {
 }
 
 export default function Game({ cryptid }: Props) {
+  const [explosion, setExplosion] = useState<{
+    visible: boolean
+    position: { top: number; left: number }
+  } | null>(null)
+
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
-  const [lineHealth, setLineHealth] = useState(100 )
+  const [lineHealth, setLineHealth] = useState(100)
   const [catchProgress, setCatchProgress] = useState(0)
   const [showModal, setShowModal] = useState(false)
   const [minions, setMinions] = useState<MinionState[]>(
@@ -58,6 +64,7 @@ export default function Game({ cryptid }: Props) {
 
   const getBeatenUp = useCallback(() => {
     setBoatHealth((prevHealth) => prevHealth - minionDamage)
+    playAudio('/audio/crab_bite.wav')
   }, [])
 
   useEffect(() => {
@@ -103,6 +110,7 @@ export default function Game({ cryptid }: Props) {
     queryClient.setQueryData(['basket'], [...currentBasket, cryptid.name])
 
     setScore((prevScore) => prevScore + cryptid.points) // Use functional update to ensure correct score
+    playAudio('audio/monster_growl.mp3')
     setShowModal(true)
   }, [cryptid, queryClient])
 
@@ -129,6 +137,19 @@ export default function Game({ cryptid }: Props) {
   }
 
   function killMinion(minionId: number) {
+    const tempArr = [...minions]
+    const minionPosition = tempArr[minionId].position // Get the minion's position
+    tempArr[minionId] = { ...tempArr[minionId], alive: false }
+    setMinions(() => tempArr)
+    playAudio('audio/explosion.mp3')
+
+    // Set the explosion state to show the explosion at the minion's position
+    setExplosion({ visible: true, position: minionPosition })
+
+    // Hide the explosion after 0.5 seconds
+    setTimeout(() => {
+      setExplosion(null)
+    }, 500) // Adjust the duration as needed
     setMinions((prevMinions) => {
       const newMinions = [...prevMinions]
       newMinions[minionId] = { ...newMinions[minionId], alive: false }
@@ -161,6 +182,21 @@ export default function Game({ cryptid }: Props) {
               targetPosition={centerPosition} // Center of the screen or near the boat
             />
           ) : null,
+        )}
+        {explosion && explosion.visible && (
+          <div
+            style={{
+              position: 'absolute',
+              top: `${explosion.position.top}px`,
+              left: `${explosion.position.left}px`,
+              width: '100px', // Adjust size as needed
+              height: '100px', // Adjust size as needed
+              // not currently working
+              backgroundImage: 'explosion.gif', // Set your explosion image path
+              backgroundSize: 'cover',
+              pointerEvents: 'none', // Prevent interactions while showing the explosion
+            }}
+          />
         )}
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
