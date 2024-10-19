@@ -22,15 +22,15 @@ export default {
       keyframes: {
         wriggleMild: {
           '0%, 100%': { transform: 'rotate(0deg)' },
-          '50%': { transform: 'rotate(3deg)' },
+          '50%': { transform: 'rotate(10deg)' },
         },
         wriggleMedium: {
           '0%, 100%': { transform: 'rotate(0deg)' },
-          '50%': { transform: 'rotate(6deg)' },
+          '50%': { transform: 'rotate(20deg)' },
         },
         wriggleAggressive: {
           '0%, 100%': { transform: 'rotate(0deg)' },
-          '50%': { transform: 'rotate(12deg)' },
+          '50%': { transform: 'rotate(30deg)' },
         },
       },
       animation: {

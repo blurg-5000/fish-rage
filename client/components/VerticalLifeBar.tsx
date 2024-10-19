@@ -98,7 +98,7 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
             className={`${animationClass}`}
             style={{
               position: 'absolute',
-              left: '50%',
+              left: '53%',
               width: '70px',
               color: 'black',
               bottom: `${imagePosition}px`,
