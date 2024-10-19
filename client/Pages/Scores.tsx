@@ -13,6 +13,8 @@ export default function Scores() {
   const [form, setForm] = useState('')
   const navigate = useNavigate()
 
+  const basket = queryClient.getQueryData(['basket'])
+  console.log(basket)
   const rawScore = useParams().score || 0
   const score = isNaN(+rawScore) ? 0 : +rawScore
 

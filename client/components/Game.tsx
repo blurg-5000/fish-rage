@@ -1,17 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Cryptid } from '../../models/models'
-import { useCallback, useEffect, useState } from 'react'
-import {
-  randomRange,
-  getRandomPositionAroundCenter,
-  playAudio,
-} from '../helperFuncs'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { randomRange, getRandomPositionAroundCenter } from '../helperFuncs'
 import Minion from './Minion'
 import { useNavigate } from 'react-router-dom'
 import HorizontalLifeBar from '../components/HorizontalLifeBar'
 import VerticalLifeBar from '../components/VerticalLifeBar'
 import Boat from './Boat'
 import Modal from './Modal'
+import { playAudio } from '../helperFuncs'
 
 interface MinionState {
   alive: boolean
@@ -22,14 +19,6 @@ interface Props {
   cryptid: Cryptid
 }
 
-export interface LineHealth {
-  lineHealth: number
-}
-
-export interface CatchProgress {
-  catchProgress: number
-}
-
 export default function Game({ cryptid }: Props) {
   const [explosion, setExplosion] = useState<{
     visible: boolean
@@ -38,45 +27,45 @@ export default function Game({ cryptid }: Props) {
 
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
-  const [lineHealth, setLineHealth] = useState<LineHealth>({ lineHealth: 100 })
-  const [catchProgress, setCatchProgress] = useState<CatchProgress>({
-    catchProgress: 0,
-  })
+  const [lineHealth, setLineHealth] = useState(100)
+  const [catchProgress, setCatchProgress] = useState(0)
   const [showModal, setShowModal] = useState(false)
-  const [minions, setMinions] = useState<MinionState[]>([
-    { alive: false, position: { top: 0, left: 0 } },
-    { alive: false, position: { top: 0, left: 0 } },
-    { alive: false, position: { top: 0, left: 0 } },
-    { alive: false, position: { top: 0, left: 0 } },
-    { alive: false, position: { top: 0, left: 0 } },
-    { alive: false, position: { top: 0, left: 0 } },
-  ])
+  const [minions, setMinions] = useState<MinionState[]>(
+    Array(6).fill({ alive: false, position: { top: 0, left: 0 } }),
+  )
 
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-
-  const spawnRate = [1, 2, 3, 4].includes(cryptid.rage)
-    ? 3
-    : [5, 6, 7].includes(cryptid.rage)
-      ? 2
-      : 1
+  const spawnRate = cryptid.rage <= 4 ? 3 : cryptid.rage <= 7 ? 2 : 1
   const minionDamage = 10
   const damageFrequency = 2000
 
   // Center position - Could be the center of the screen or near the boat
-  const centerPosition = {
-    top: window.innerHeight / 2 - 150, // Adjust based on boat position if needed
-    left: window.innerWidth / 2 - 75, // Adjust based on boat position if needed
-  }
+  const centerPosition = useMemo(
+    () => ({
+      top: window.innerHeight / 2 - 150, // Adjust based on boat position if needed
+      left: window.innerWidth / 2 - 75, // Adjust based on boat position if needed
+    }),
+    [],
+  )
+
+  useEffect(() => {
+    if (boatHealth === 0) {
+      queryClient.setQueryData(['basket'], [])
+      navigate('/scores/died')
+    }
+  }, [boatHealth, navigate, queryClient])
+
+  useEffect(() => {
+    if (lineHealth <= 0) {
+      navigate(`/scores/${score}`)
+    }
+  }, [lineHealth, navigate, score])
 
   const getBeatenUp = useCallback(() => {
     setBoatHealth((prevHealth) => prevHealth - minionDamage)
     playAudio('/audio/crab_bite.wav')
   }, [])
-
-  if (boatHealth === 0) {
-    navigate('/scores/0')
-  }
 
   useEffect(() => {
     const spawnInterval = setInterval(() => {
@@ -104,7 +93,7 @@ export default function Game({ cryptid }: Props) {
     }, spawnRate * 1000)
 
     return () => clearInterval(spawnInterval)
-  }, [minions, spawnRate])
+  }, [minions, spawnRate, centerPosition])
 
   useEffect(() => {
     const attackInterval = setInterval(() => {
@@ -116,13 +105,34 @@ export default function Game({ cryptid }: Props) {
     return () => clearInterval(attackInterval)
   }, [getBeatenUp, minions])
 
-  function finishFishing() {
-    setScore((currentScore) => currentScore + cryptid.points)
+  const finishFishing = useCallback(() => {
+    const currentBasket = queryClient.getQueryData(['basket']) as string[]
+    queryClient.setQueryData(['basket'], [...currentBasket, cryptid.name])
+
+    setScore((prevScore) => prevScore + cryptid.points) // Use functional update to ensure correct score
     playAudio('audio/monster_growl.mp3')
     setShowModal(true)
-  }
+  }, [cryptid, queryClient])
+
+  const handleKeyDown = useCallback(() => {
+    setCatchProgress((prevProgress) => {
+      if (prevProgress + 10 >= 100) {
+        finishFishing()
+        return 0 // Reset progress after fishing finishes
+      }
+      return prevProgress + 10
+    })
+
+    setLineHealth((prevHealth) => prevHealth - randomRange(0, spawnRate))
+  }, [finishFishing, spawnRate])
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
 
   function getNewFish() {
+    setCatchProgress(0)
     queryClient.invalidateQueries({ queryKey: ['cryptids'] })
   }
 
@@ -140,6 +150,11 @@ export default function Game({ cryptid }: Props) {
     setTimeout(() => {
       setExplosion(null)
     }, 500) // Adjust the duration as needed
+    setMinions((prevMinions) => {
+      const newMinions = [...prevMinions]
+      newMinions[minionId] = { ...newMinions[minionId], alive: false }
+      return newMinions
+    })
   }
 
   return (
@@ -155,8 +170,6 @@ export default function Game({ cryptid }: Props) {
         </section>
       )}
       <p>Score: {score}</p>
-      <p>Boat health: {boatHealth}</p>
-      <p>Cryptid: {cryptid.name}</p>
       <div className="boat relative">
         {minions.map((minionState, i) =>
           minionState.alive ? (

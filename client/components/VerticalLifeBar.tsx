@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { CatchProgress, LineHealth } from './Game'
-import { playAudio } from '../helperFuncs'
 
 interface Props {
   color: string
-  value: LineHealth | CatchProgress
+  value: number
   intensity?: number
 }
 
@@ -16,16 +14,10 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
   console.log('intensity', intensity)
 
   // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
-  let val: number
-
-  if ('lineHealth' in value) {
-    val = value.lineHealth
-  } else {
-    val = value.catchProgress
-  }
+  const val = value
 
   useEffect(() => {
-    if ('catchProgress' in value) {
+    if (color === 'red') {
       setSprite(true)
       if (intensity)
         if (intensity >= 7 && intensity <= 10) {
@@ -79,13 +71,13 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
   const whiteValue = 100 - val
   const percent = whiteValue / max
   // Dynamic value gets put into the dynamic svg - rect
-  let dynamicValue = Math.floor(percent * fullHeight)
+  const dynamicValue = Math.floor(percent * fullHeight)
   // position of the cryptid sprite, for catch progress bar
   const imagePosition = val - 10
 
   console.log('imageposition', imagePosition)
 
-  if ('catchProgress' in value) console.log('dynamic value', dynamicValue)
+  if (color === 'red') console.log('dynamic value', dynamicValue)
   return (
     <>
       <div>
