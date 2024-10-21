@@ -1,36 +1,30 @@
-# Boilerplate: Fullstack with Sass
+# Fish Rage
 
-## Setup
+## What is Fish Rage?
 
-### What's included
+Fish Rage is a game which was developed during the "Idea Fusioner Hackathon" held at Dev Academy Aotearoa in October of 2024. This was a social hackathon where each team drew 2 random ideas from a hat, and had to make a project incorporating both ideas. We pulled "Boats" and "Cryptids", so decided to make a fishing game.
 
-This repo includes:
+## How to play
 
-* a single, simple API endpoint (`/api/v1/fruits`)
-* frontend routing via react-router
-* an auth0 setup waiting to be configured
-* an example database module (`server/db/fruits.js`)
-* an API client module (`client/apis/fruits.js`)
-* configuration for Vitest and testing library
-* configuration for server-side debugging in VS Code
-* configuration for preprocessing css with tailwind support
+The project is currently not deployed as we'd like to polish a few things first, but the game in its current state can be played by doing the following from your command line:
 
-### Installation
+* Clone this repo and `cd` into the folder
+* Run `npm i` to install the required packages
+* Run `npm run knex migrate:latest && npm run knex seed:run` to set up the database
+* Run `npm run dev` to start the server
+* Navigate to [http://localhost:5173](http://localhost:5173) in your browser
 
-#### **From the Github UI**
+## Key technology we used
 
-See the instructions [here](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) to use Github's feature to create a new repo from a template.
+* React
+* Tailwind
+* Typescript
+* Knex & sqlite3
+* Express
 
-#### **From the command line**
+## The team
 
-```
-git clone https://github.com/dev-academy-challenges/boilerplate-fullstack [your-project-name]
-cd [your-project-name]
-npm install # to install dependencies
-npm run dev # to start the dev server
-```
+* [Daph](https://github.com/daphne-simons)
+* [Hannah](https://github.com/HannahBurgoyne)
+* [Jared](https://github.com/jared-pinfold)
 
-You can find the server running on [http://localhost:3000](http://localhost:3000) and the client running on [http://localhost:5173](http://localhost:5173).
-
----
-[Provide feedback on this repo](https://docs.google.com/forms/d/e/1FAIpQLSfw4FGdWkLwMLlUaNQ8FtP2CTJdGDUv6Xoxrh19zIrJSkvT4Q/viewform?usp=pp_url&entry.1958421517=boilerplate-fullstack)
