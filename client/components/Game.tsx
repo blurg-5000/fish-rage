@@ -145,7 +145,7 @@ export default function Game({ cryptid }: Props) {
         alive: false,
         exploding: true,
       }
-      console.log('Minion exploding:', newMinions[minionId])
+
       return newMinions
     })
 
@@ -156,7 +156,7 @@ export default function Game({ cryptid }: Props) {
           ...newMinions[minionId],
           exploding: false,
         }
-        console.log('Minion explosion cleared:', newMinions[minionId])
+
         return newMinions
       })
     }, 500)
@@ -194,20 +194,6 @@ export default function Game({ cryptid }: Props) {
               />
             ) : null, // Remove only when not alive and not exploding
         )}
-
-        {/* {explosion && explosion.visible && (
-          <img
-            src="explosion.gif"
-            style={{
-              position: 'absolute',
-              top: `${explosion.position.top}px`,
-              left: `${explosion.position.left}px`,
-              width: '100px', // Adjust size as needed
-              height: '100px', // Adjust size as needed
-              // not currently working
-            }}
-          />
-        )} */}
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
       <button onClick={getBeatenUp}>get beaten up</button> {/* temp */}
