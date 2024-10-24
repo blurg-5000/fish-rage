@@ -2,9 +2,12 @@ import { useEffect, useState } from 'react'
 
 interface Props {
   alive: boolean
+  explosion: boolean
+  exploding: boolean
   minionId: number
   initialPosition: { top: number; left: number }
   targetPosition: { top: number; left: number }
+  setExplosion: React.Dispatch<React.SetStateAction<boolean>>
   killMinion: (id: number) => void
 }
 
@@ -12,7 +15,10 @@ export default function Minion({
   alive,
   minionId,
   initialPosition,
+  exploding,
   targetPosition,
+  explosion,
+  setExplosion,
   killMinion,
 }: Props) {
   const [position, setPosition] = useState(initialPosition)
@@ -64,28 +70,30 @@ export default function Minion({
     requestAnimationFrame(moveMinion)
   }, [])
 
-  if (alive)
+  function handleClick(minionId: number) {
+    killMinion(minionId) // Kill the minion first (exploding set to true)
+  }
+
+  if (alive || exploding)
+    // Render if alive or exploding
     return (
       <button
-        onClick={() => killMinion(minionId)}
-        // Animate wiggle is a custom tailwind config
-        className="animate-wiggle absolute rounded-full transition-all duration-[5s]" // This uses Tailwind for smooth animation
+        onClick={() => handleClick(minionId)}
+        className="absolute animate-wiggle rounded-full transition-all duration-[5s]"
         style={{
           position: 'absolute',
-          // The size (height and width) of the crab changes dynamically based on the size state
           height: `${size * 5}rem`,
           width: `${size * 5}rem`,
           top: `${position.top}px`,
           left: `${position.left}px`,
-          transition: 'transform 0.1s linear', // Smoother animation
-          backgroundImage: 'url("/sprites/crab_sprite.png")',
-          backgroundPosition: 'center', // Center the image
-          backgroundRepeat: 'no-repeat', // Do not repeat the image
-          backgroundSize: 'cover', // Resize the background image to cover
+          transition: 'transform 0.1s linear',
+          backgroundImage: exploding
+            ? 'url("explosion.gif")'
+            : 'url("/sprites/crab_sprite.png")',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
         }}
-      >
-        {/* Shows the minion Id - maybe useful for debugging? */}
-        {/* {`${minionId + 1}`} */}
-      </button>
+      ></button>
     )
 }

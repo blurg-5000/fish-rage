@@ -13,6 +13,7 @@ import { playAudio } from '../helperFuncs'
 interface MinionState {
   alive: boolean
   position: { top: number; left: number }
+  exploding: boolean // Add exploding state
 }
 
 interface Props {
@@ -20,10 +21,7 @@ interface Props {
 }
 
 export default function Game({ cryptid }: Props) {
-  const [explosion, setExplosion] = useState<{
-    visible: boolean
-    position: { top: number; left: number }
-  } | null>(null)
+  const [explosion, setExplosion] = useState(false)
 
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
@@ -86,7 +84,11 @@ export default function Game({ cryptid }: Props) {
         )
 
         const tempArr = [...minions]
-        tempArr[idleMinion] = { alive: true, position: randomPosition }
+        tempArr[idleMinion] = {
+          alive: true,
+          position: randomPosition,
+          exploding: false,
+        }
 
         setMinions(() => tempArr)
       }
@@ -135,26 +137,31 @@ export default function Game({ cryptid }: Props) {
     setCatchProgress(0)
     queryClient.invalidateQueries({ queryKey: ['cryptids'] })
   }
-
   function killMinion(minionId: number) {
-    const tempArr = [...minions]
-    const minionPosition = tempArr[minionId].position // Get the minion's position
-    tempArr[minionId] = { ...tempArr[minionId], alive: false }
-    setMinions(() => tempArr)
-    playAudio('audio/explosion.mp3')
-
-    // Set the explosion state to show the explosion at the minion's position
-    setExplosion({ visible: true, position: minionPosition })
-
-    // Hide the explosion after 0.5 seconds
-    setTimeout(() => {
-      setExplosion(null)
-    }, 500) // Adjust the duration as needed
     setMinions((prevMinions) => {
       const newMinions = [...prevMinions]
-      newMinions[minionId] = { ...newMinions[minionId], alive: false }
+      newMinions[minionId] = {
+        ...newMinions[minionId],
+        alive: false,
+        exploding: true,
+      }
+      console.log('Minion exploding:', newMinions[minionId])
       return newMinions
     })
+
+    setTimeout(() => {
+      setMinions((prevMinions) => {
+        const newMinions = [...prevMinions]
+        newMinions[minionId] = {
+          ...newMinions[minionId],
+          exploding: false,
+        }
+        console.log('Minion explosion cleared:', newMinions[minionId])
+        return newMinions
+      })
+    }, 500)
+
+    playAudio('audio/explosion.mp3')
   }
 
   return (
@@ -171,20 +178,26 @@ export default function Game({ cryptid }: Props) {
       )}
       <p>Score: {score}</p>
       <div className="boat relative">
-        {minions.map((minionState, i) =>
-          minionState.alive ? (
-            <Minion
-              key={`m${i}`}
-              alive={minionState.alive}
-              minionId={i}
-              killMinion={killMinion}
-              initialPosition={minionState.position}
-              targetPosition={centerPosition} // Center of the screen or near the boat
-            />
-          ) : null,
+        {minions.map(
+          (minionState, i) =>
+            minionState.alive || minionState.exploding ? ( // Render while alive or exploding
+              <Minion
+                key={`m${i}`}
+                alive={minionState.alive}
+                explosion={explosion}
+                exploding={minionState.exploding} // Use this to control the explosion display
+                setExplosion={setExplosion}
+                minionId={i}
+                killMinion={killMinion}
+                initialPosition={minionState.position}
+                targetPosition={centerPosition}
+              />
+            ) : null, // Remove only when not alive and not exploding
         )}
-        {explosion && explosion.visible && (
-          <div
+
+        {/* {explosion && explosion.visible && (
+          <img
+            src="explosion.gif"
             style={{
               position: 'absolute',
               top: `${explosion.position.top}px`,
@@ -192,12 +205,9 @@ export default function Game({ cryptid }: Props) {
               width: '100px', // Adjust size as needed
               height: '100px', // Adjust size as needed
               // not currently working
-              backgroundImage: 'explosion.gif', // Set your explosion image path
-              backgroundSize: 'cover',
-              pointerEvents: 'none', // Prevent interactions while showing the explosion
             }}
           />
-        )}
+        )} */}
       </div>
       <button onClick={finishFishing}>fish</button> {/* temp */}
       <button onClick={getBeatenUp}>get beaten up</button> {/* temp */}
