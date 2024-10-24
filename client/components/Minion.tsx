@@ -17,8 +17,6 @@ export default function Minion({
   initialPosition,
   exploding,
   targetPosition,
-  explosion,
-  setExplosion,
   killMinion,
 }: Props) {
   const [position, setPosition] = useState(initialPosition)
@@ -75,7 +73,6 @@ export default function Minion({
   }
 
   if (alive || exploding)
-    // Render if alive or exploding
     return (
       <button
         onClick={() => handleClick(minionId)}

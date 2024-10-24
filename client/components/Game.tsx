@@ -22,7 +22,6 @@ interface Props {
 
 export default function Game({ cryptid }: Props) {
   const [explosion, setExplosion] = useState(false)
-
   const [score, setScore] = useState(0)
   const [boatHealth, setBoatHealth] = useState(100)
   const [lineHealth, setLineHealth] = useState(100)
