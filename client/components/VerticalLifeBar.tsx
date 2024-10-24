@@ -37,7 +37,7 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
     if (rage === 'high') {
       // Create and play audio if it doesn't already exist
       if (!audioRef.current) {
-        audioRef.current = new Audio('audio/high_rage.mp3')
+        audioRef.current = new Audio('audio/boss_music.mp3')
       }
       audioRef.current.play()
     } else {
