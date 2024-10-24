@@ -11,8 +11,6 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
   const [rage, setRage] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  console.log('intensity', intensity)
-
   // TODO : If value is Catch progress, insert the cryptid Sprite, and logic to attach sprite to the progress level.
   const val = value
 
@@ -64,8 +62,6 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
         ? 'animate-wriggleMedium'
         : 'animate-wriggleMild'
 
-  //console.log(animationClass)
-
   const fullHeight = 98
   const max = 100
   const whiteValue = 100 - val
@@ -75,9 +71,6 @@ export default function VerticalLifeBar({ color, value, intensity }: Props) {
   // position of the cryptid sprite, for catch progress bar
   const imagePosition = val - 10
 
-  console.log('imageposition', imagePosition)
-
-  if (color === 'red') console.log('dynamic value', dynamicValue)
   return (
     <>
       <div>

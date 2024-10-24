@@ -33,9 +33,15 @@ export default function Modal({
         <h1>You caught: {cryptid.name}!</h1>
         <img
           src={`./cryptid-images/${cryptid.image}`}
-          className="max-h-screen-md h-auto w-auto max-w-screen-md object-contain"
+          className="max-h-screen-md w-90 h-auto max-w-screen-md object-contain"
+          style={
+            cryptid.image === 'spam_can_small.png'
+              ? { maxHeight: '400px', maxWidth: 'auto' }
+              : {}
+          }
           alt={cryptid.name}
         />
+
         <p>You've earned {cryptid.points} points</p>
       </section>
     )

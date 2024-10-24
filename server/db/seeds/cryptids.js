@@ -51,7 +51,7 @@ export async function seed(knex) {
       size: 1,
       rage: 1,
       points: 0,
-      image: 'spam-can.png',
+      image: 'spam_can_small.png',
     },
     {
       id: 8,
