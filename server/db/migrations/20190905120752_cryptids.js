@@ -9,6 +9,7 @@ export async function up(knex) {
     table.integer('rage')
     table.integer('points')
     table.string('image')
+    table.string('description')
   })
 }
 

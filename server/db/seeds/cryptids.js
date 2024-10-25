@@ -12,6 +12,7 @@ export async function seed(knex) {
       rage: 8,
       points: 80,
       image: 'kraken.png',
+      description: `damn, that's a big octopus!`,
     },
     {
       id: 3,
@@ -20,6 +21,7 @@ export async function seed(knex) {
       rage: 10,
       points: 100,
       image: 'cthulhu.png',
+      description: `needs to calm the hell down`,
     },
     {
       id: 4,
@@ -28,6 +30,7 @@ export async function seed(knex) {
       rage: 3,
       points: 30,
       image: 'jason-statham.png',
+      description: `caught on camera many times - who knows if he really exists?`,
     },
     {
       id: 5,
@@ -36,6 +39,7 @@ export async function seed(knex) {
       rage: 4,
       points: 40,
       image: 'bunyip.png',
+      description: `scarier than he looks`,
     },
     {
       id: 6,
@@ -44,6 +48,7 @@ export async function seed(knex) {
       rage: 4,
       points: 40,
       image: 'samsquatch.png',
+      description: `got himself some jack links sponsorship`,
     },
     {
       id: 7,
@@ -52,6 +57,7 @@ export async function seed(knex) {
       rage: 1,
       points: 0,
       image: 'spam_can_small.png',
+      description: `totally not an easter egg to another project`,
     },
     {
       id: 8,
@@ -60,6 +66,7 @@ export async function seed(knex) {
       rage: 2,
       points: 10,
       image: 'gumboot.png',
+      description: `legend says he ate the other gumboot`,
     },
   ])
 }
