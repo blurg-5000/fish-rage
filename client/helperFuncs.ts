@@ -20,11 +20,13 @@ export function getRandomPositionAroundCenter(
   minDistance: number,
   maxDistance: number,
 ): { top: number; left: number } {
-  const angle = Math.random() * 2 * Math.PI // Random angle in radians
-  const distance = minDistance + Math.random() * (maxDistance - minDistance) // Random distance between minDistance and maxDistance
+  // Restrict the angle to 0 to π for top, left, and right spawns (0 to 180 degrees)
+  const angle = Math.random() * Math.PI // Angle in radians between 0 and π
 
-  // Calculate the x and y position based on the angle and distance
-  const top = center.top + Math.sin(angle) * distance
+  const distance = minDistance + Math.random() * (maxDistance - minDistance)
+
+  // Calculate top and left positions based on angle and distance
+  const top = center.top - Math.sin(angle) * distance // Ensuring they spawn above the center
   const left = center.left + Math.cos(angle) * distance
 
   return { top, left }

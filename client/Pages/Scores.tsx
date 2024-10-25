@@ -14,7 +14,7 @@ export default function Scores() {
   const navigate = useNavigate()
 
   const basket = queryClient.getQueryData(['basket'])
-  console.log(basket)
+
   const rawScore = useParams().score || 0
   const score = isNaN(+rawScore) ? 0 : +rawScore
 
