@@ -107,9 +107,9 @@ export default function Game({ cryptid }: Props) {
   }, [getBeatenUp, minions])
 
   const finishFishing = useCallback(() => {
-    const currentBasket = queryClient.getQueryData(['basket']) as string[]
-    queryClient.setQueryData(['basket'], [...currentBasket, cryptid.name])
-
+    const currentBasket = queryClient.getQueryData(['basket']) as Cryptid[]
+    queryClient.setQueryData(['basket'], [...currentBasket, { ...cryptid }])
+    console.log(currentBasket)
     setScore((prevScore) => prevScore + cryptid.points) // Use functional update to ensure correct score
     playAudio('audio/monster_growl.mp3')
     setShowModal(true)

@@ -4,6 +4,7 @@ export interface CryptidData {
   rage: number
   points: number
   image: string
+  description: string
 }
 
 export interface Cryptid extends CryptidData {

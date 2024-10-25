@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { Outlet } from 'react-router-dom'
 import AudioPlayer from './Audio'
+import { Cryptid } from '../../models/models'
 
 export default function Layout() {
   // todo: add query to store fishing basket
   useQuery({
-queryKey: ['basket'],
-queryFn: () => [] as string[]
+    queryKey: ['basket'],
+    queryFn: () => [] as Cryptid[],
   })
 
   return (

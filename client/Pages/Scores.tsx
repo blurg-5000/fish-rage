@@ -2,18 +2,21 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { addNewScore, getScores } from '../apis/scores'
 import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Score } from '../../models/models'
+import { Cryptid, Score } from '../../models/models'
 
 export default function Scores() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['scores'],
     queryFn: getScores,
   })
+
   const queryClient = useQueryClient()
   const [form, setForm] = useState('')
   const navigate = useNavigate()
 
-  const basket = queryClient.getQueryData(['basket'])
+  const basket = queryClient.getQueryData(['basket']) as Cryptid[]
+
+  console.log(basket)
 
   const rawScore = useParams().score || 0
   const score = isNaN(+rawScore) ? 0 : +rawScore
@@ -34,36 +37,55 @@ export default function Scores() {
   if (data) {
     return (
       <>
-        <p>Scores!</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((score) => (
-              <tr key={`score${score.id}`}>
-                <td>{score.name}</td>
-                <td>{score.score}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <section className="flex justify-center">
+          <div className="m-10">
+            <h1>Scores!</h1>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((score) => (
+                  <tr key={`score${score.id}`}>
+                    <td>{score.name}</td>
+                    <td>{score.score}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-        {score > data[9].score && (
-          <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor="name">Enter your name: </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={form}
-              onChange={(e) => handleChange(e)}
-            />
-          </form>
-        )}
+            {score > data[9].score && (
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <label htmlFor="name">Enter your name: </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={form}
+                  onChange={(e) => handleChange(e)}
+                />
+              </form>
+            )}
+          </div>
+
+          <div className="m-10">
+            <h2>Basket</h2>
+            {basket?.map((cryptid, i) => (
+              <div key={`${cryptid.name} ${cryptid.id} ${i} `}>
+                <h2>{cryptid.name}</h2>
+                <img
+                  src={`/cryptid-images/${cryptid.image}`}
+                  alt={cryptid.name}
+                  className="h-auto w-60"
+                />
+                <p>{cryptid.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
         {/* Basic Re-Play button  */}
         <div className="flex justify-center ">
           <button className="rounded-md border-2 border-solid border-red-600 p-2 px-6 text-sm text-red-600">
